@@ -13,8 +13,9 @@ Python implementations of fundamental algorithms and data structures
     - Heap
     - Hash table
     - BST
-- Graphs
+- Graph algorithms
     - DFS
     - BFS
     - Dijkstra's
+    - Bellman-Ford
     - Prim's
