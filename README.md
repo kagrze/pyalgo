@@ -4,22 +4,22 @@ algorithms
 Python implementations of fundamental algorithms and data structures
 
 - Sorting
-    - Insertion sort
-    - Merge sort
-    - Quicksort
+    - [Insertion sort](sort.py)
+    - [Merge sort](sort.py)
+    - [Quicksort](sort.py)
 - Data structures
-    - Stack
-    - Queue
-    - Heap
-    - Hash table
-    - BST
+    - [Stack](linkedlist.py)
+    - [Queue](linkedlist.py)
+    - [Heap](heap.py)
+    - [Hash table](hashmap.py)
+    - [BST](tree.py)
 - Graph algorithms
-    - DFS
-    - BFS
-    - Bellman-Ford
-    - Dijkstra's
-    - Prim's
+    - [DFS](graphs.py)
+    - [BFS](graphs.py)
+    - [Bellman-Ford](graphs.py)
+    - [Dijkstra's](graphs.py)
+    - [Prim's](graphs.py)
 - Data compression
-    - Huffman coding
+    - [Huffman coding](huffman.py)
 
 All the algorithms are accompanied with unit tests

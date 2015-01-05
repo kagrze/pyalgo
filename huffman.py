@@ -1,4 +1,4 @@
-import bitarray  # you need to install this package, e.g. "sudo pip3 install bitarray"
+import bitarray  # you need to install bitarray package, e.g. "sudo pip3 install bitarray"
 
 
 class Node:
