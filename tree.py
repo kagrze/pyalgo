@@ -82,7 +82,8 @@ class Node:
 
 
 class Tree:
-    """Binary Search Tree"""
+    """Binary Search Tree
+    For simplicity implemented without balancing"""
     __root = None
 
     def set_value(self, key, value):

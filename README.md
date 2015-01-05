@@ -16,6 +16,10 @@ Python implementations of fundamental algorithms and data structures
 - Graph algorithms
     - DFS
     - BFS
-    - Dijkstra's
     - Bellman-Ford
+    - Dijkstra's
     - Prim's
+- Data compression
+    - Huffman coding
+
+All the algorithms are accompanied with unit tests

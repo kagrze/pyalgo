@@ -65,7 +65,7 @@ def quicksort(num_array):
 
 
 if __name__ == '__main__':
-    import copy
+    from copy import copy
 
     numbers = [3, 5, 4, 1, 8, 6, 1]
     numbers_sorted = [1, 1, 3, 4, 5, 6, 8]
@@ -73,7 +73,7 @@ if __name__ == '__main__':
     assert insertionsort(numbers) == numbers_sorted
     assert mergesort(numbers) == numbers_sorted
 
-    numbers_to_sort = copy.copy(numbers)
+    numbers_to_sort = copy(numbers)
     quicksort(numbers_to_sort)
     assert numbers_to_sort == numbers_sorted
 
