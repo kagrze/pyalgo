@@ -59,38 +59,6 @@ def get_bfs_shortest_path_to(graph, start_vertex, target_vertex):
                 to_explore.appendleft(adj_vertex)
 
 
-def get_dijkstra_shortest_path_to(graph, start_vertex, target_vertex):
-    """Dijkstra's shortest-path algorithm
-    All edges are assumed to be non-negative"""
-    def relax(a, b, l):
-        """Relax an edge from vertex a to vertex b of length l"""
-        distance_through_edge = dist_to[a] + l
-        if distance_through_edge < dist_to[b]:
-            dist_to[b] = distance_through_edge
-            predecessors[b] = a
-            if to_explore.get_key(b) is not None:
-                to_explore.decrease_key(distance_through_edge, b)
-            else:
-                to_explore.push(distance_through_edge, b)
-
-    import sys
-    from heap import Heap
-
-    dist_to = [sys.maxsize] * graph.get_vertex_number()
-    dist_to[start_vertex] = 0
-    predecessors = [None] * graph.get_vertex_number()  # previous vertex on the path
-
-    to_explore = Heap()
-    to_explore.push(0, start_vertex)
-
-    while to_explore.size() > 0:
-        _, current_vertex = to_explore.pop()
-        for adj_vertex, edge_length in graph.adjacencies(current_vertex, True):
-            relax(current_vertex, adj_vertex, edge_length)
-
-    return _get_path(target_vertex, predecessors), dist_to[target_vertex]
-
-
 def get_bellman_ford_shortest_path_to(graph, start_vertex, target_vertex):
     """Bellman-Ford shortest-path algorithm
     It is assumed that there are no negative cycles in the graph"""
@@ -125,12 +93,45 @@ def get_bellman_ford_shortest_path_to(graph, start_vertex, target_vertex):
     return _get_path(target_vertex, predecessors), dist_to[target_vertex]
 
 
-def build_mst(graph):
-    """Prim's MST algorithm; eager implementation"""
+def get_dijkstra_shortest_path_to(graph, start_vertex, target_vertex):
+    """Dijkstra's shortest-path algorithm
+    All edges are assumed to be non-negative"""
+    def relax(a, b, l):
+        """Relax an edge from vertex a to vertex b of length l"""
+        distance_through_edge = dist_to[a] + l
+        if distance_through_edge < dist_to[b]:
+            dist_to[b] = distance_through_edge
+            predecessors[b] = a
+            if to_explore.get_key(b) is not None:
+                to_explore.decrease_key(distance_through_edge, b)
+            else:
+                to_explore.push(distance_through_edge, b)
+
+    import sys
     from heap import Heap
 
-    mst = []
+    dist_to = [sys.maxsize] * graph.get_vertex_number()
+    dist_to[start_vertex] = 0
+    predecessors = [None] * graph.get_vertex_number()  # previous vertex on the path
+
+    to_explore = Heap()
+    to_explore.push(0, start_vertex)
+
+    while to_explore.size() > 0:
+        _, current_vertex = to_explore.pop()
+        for adj_vertex, edge_length in graph.adjacencies(current_vertex, True):
+            relax(current_vertex, adj_vertex, edge_length)
+
+    return _get_path(target_vertex, predecessors), dist_to[target_vertex]
+
+
+def build_mst(graph):
+    """Prim's MST algorithm; eager implementation
+    Returns a set of MST edges"""
+    from heap import Heap
+
     mst_edges = []
+    mst_vertices = []
     predecessors = [None] * graph.get_vertex_number()  # previous vertex in the tree
 
     start_vertex = 0  # does not matter where we start building MST
@@ -139,18 +140,18 @@ def build_mst(graph):
 
     while to_explore.size() > 0:
         _, current_vertex = to_explore.pop()
-        mst_edges.append(current_vertex)
+        mst_vertices.append(current_vertex)
         if predecessors[current_vertex] is not None:
-            mst.append((predecessors[current_vertex], current_vertex) if predecessors[current_vertex] < current_vertex else (current_vertex, predecessors[current_vertex]))
+            mst_edges.append((predecessors[current_vertex], current_vertex) if predecessors[current_vertex] < current_vertex else (current_vertex, predecessors[current_vertex]))
         for adj_vertex, edge_length in graph.adjacencies(current_vertex, True):
-            if adj_vertex in mst_edges:
+            if adj_vertex in mst_vertices:
                 continue
             adj_length = to_explore.get_key(adj_vertex)
-            if not adj_length:
+            if adj_length is None:
                 to_explore.push(edge_length, adj_vertex)
                 predecessors[adj_vertex] = current_vertex
             elif edge_length < adj_length:
                 to_explore.decrease_key(edge_length, adj_vertex)
                 predecessors[adj_vertex] = current_vertex
 
-    return set(mst)
+    return set(mst_edges)

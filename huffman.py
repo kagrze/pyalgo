@@ -76,19 +76,19 @@ def _build_trie(char_frequency_map):
     return nodes.pop()[1]
 
 
-def _build_code_map(trie, code):
+def _build_code_map(node, code):
     from copy import copy
 
-    if trie.is_leaf:
-        return [(trie.char, code)]
+    if node.is_leaf:
+        return [(node.char, code)]
 
     code_copy = copy(code)
     code.append(False)
     code_copy.append(True)
 
     code_map = []
-    code_map.extend(_build_code_map(trie.left, code))
-    code_map.extend(_build_code_map(trie.right, code_copy))
+    code_map.extend(_build_code_map(node.left, code))
+    code_map.extend(_build_code_map(node.right, code_copy))
     return code_map
 
 
