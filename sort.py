@@ -42,16 +42,16 @@ def quicksort(num_array):
     """sorts num_array in-place
     returns None"""
     def quicksort_subarray(left, right):
-        """sorts in-place subarray of num_array from index left (inclusive) to right (exclusive)"""
+        """Sorts in-place a subarray of num_array from the left index (inclusive) to the right index (exclusive)."""
         if left < right:
-            sec_part_idx = partition(num_array, left, right)
+            sec_part_idx = partition(left, right)
             quicksort_subarray(left, sec_part_idx - 1)
             quicksort_subarray(sec_part_idx, right)
 
-    def partition(num_array, left, right):
-        """partition in-place subarray of num_array from index left (inclusive) to right (exclusive)
-        returns an index of a beginning of the second partition
-        implementation assumes that pivot is the first element of an array"""
+    def partition(left, right):
+        """Partition in-place a subarray of num_array from the left index (inclusive) to the right index (exclusive).
+        Returns an index of the beginning of the second partition.
+        The implementation assumes that the first element of an array is a pivot."""
         pivot = num_array[left]
         i = left + 1
         for j in range(left + 1, right):
