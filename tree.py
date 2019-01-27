@@ -15,13 +15,12 @@ class Node:
             return self
         if key < self.__key:
             return None if not self.__left else self.__left.get_node(key)
-        else:
-            return None if not self.__right else self.__right.get_node(key)
+        return None if not self.__right else self.__right.get_node(key)
 
     def set_value(self, key, value):
         if self.__key == key:
             self.__value = value
-        if key < self.__key:
+        elif key < self.__key:
             if not self.__left:
                 self.__left = Node(key, value, self)
             else:
