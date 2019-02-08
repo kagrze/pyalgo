@@ -8,37 +8,35 @@ class Element:
 
 
 class Stack:
-    top = None
+    _top = None
+
+    def __nonzero__(self):
+        return True if self._top else False
 
     def push(self, value):
-        self.top = Element(value, self.top)
+        self._top = Element(value, self._top)
 
     def pop(self):
-        if self.top is None:
+        if not self._top:
             return None
-        value = self.top.value
-        self.top = self.top.next_element
+        value = self._top.value
+        self._top = self._top.next_element
         return value
 
 
-class Queue:
-    front = None
-    back = None
+class Queue(Stack):
+    _back = None
 
     def enqueue(self, value):
         new_element = Element(value, None)
-        if self.back is not None:
-            self.back.next_element = new_element
-        self.back = new_element
-        if self.front is None:
-            self.front = new_element
+        if self._back:
+            self._back.next_element = new_element
+        self._back = new_element
+        if not self._top:
+            self._top = new_element
 
     def dequeue(self):
-        if self.front is None:
-            return None
-        value = self.front.value
-        self.front = self.front.next_element
-        return value
+        return self.pop()
 
 
 if __name__ == '__main__':

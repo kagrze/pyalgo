@@ -38,25 +38,25 @@ def _get_path(vertex, predecessors):
 
 def get_bfs_shortest_path_to(graph, start_vertex, target_vertex):
     """Breadth-First Search (BFS)"""
-    from collections import deque
+    from linkedlist import Queue
 
     predecessors = [None] * graph.get_vertex_number()  # previous vertex on the path
 
-    to_explore = deque()
-    to_explore.appendleft(start_vertex)
+    to_explore = Queue()
+    to_explore.enqueue(start_vertex)
 
     explored = [False] * graph.get_vertex_number()
     explored[start_vertex] = True
 
-    while len(to_explore) != 0:
-        current_vertex = to_explore.pop()
+    while to_explore:
+        current_vertex = to_explore.dequeue()
         for adj_vertex in graph.adjacencies(current_vertex):
             if not explored[adj_vertex]:
                 predecessors[adj_vertex] = current_vertex
                 if adj_vertex == target_vertex:
                     return _get_path(target_vertex, predecessors)
                 explored[adj_vertex] = True
-                to_explore.appendleft(adj_vertex)
+                to_explore.enqueue(adj_vertex)
 
 
 def get_bellman_ford_shortest_path_to(graph, start_vertex, target_vertex):
@@ -70,22 +70,22 @@ def get_bellman_ford_shortest_path_to(graph, start_vertex, target_vertex):
             predecessors[b] = a
             if not on_queue[b]:
                 on_queue[b] = True
-                to_explore.appendleft(b)
+                to_explore.enqueue(b)
 
     import sys
-    from collections import deque
+    from linkedlist import Queue
 
     dist_to = [sys.maxsize] * graph.get_vertex_number()
     dist_to[start_vertex] = 0
     predecessors = [None] * graph.get_vertex_number()  # previous vertex on the path
 
-    to_explore = deque()
-    to_explore.appendleft(start_vertex)
+    to_explore = Queue()
+    to_explore.enqueue(start_vertex)
     on_queue = [False] * graph.get_vertex_number()
     on_queue[start_vertex] = True
 
-    while len(to_explore) != 0:
-        current_vertex = to_explore.pop()
+    while to_explore:
+        current_vertex = to_explore.dequeue()
         on_queue[current_vertex] = False
         for adj_vertex, edge_length in graph.adjacencies(current_vertex, True):
             relax(current_vertex, adj_vertex, edge_length)
