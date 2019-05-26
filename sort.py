@@ -1,24 +1,27 @@
-def insertionsort(num_array):
-    def insert(element, sorted_array):
-        if len(sorted_array) == 0:
+from copy import copy
+
+
+def insertionsort(elements):
+    def insert(element, sorted_elements):
+        if len(sorted_elements) == 0:
             to_return = [element]
-        elif element < sorted_array[0]:
+        elif element < sorted_elements[0]:
             to_return = [element]
-            to_return.extend(sorted_array)
+            to_return.extend(sorted_elements)
         else:
-            to_return = [sorted_array[0]]
-            to_return.extend(insert(element, sorted_array[1:]))
+            to_return = [sorted_elements[0]]
+            to_return.extend(insert(element, sorted_elements[1:]))
         return to_return
 
-    return num_array if len(num_array) == 0 else insert(num_array[0], insertionsort(num_array[1:]))
+    return elements if len(elements) == 0 else insert(elements[0], insertionsort(elements[1:]))
 
 
-def mergesort(num_array):
+def mergesort(elements):
     def merge(lhs, rhs):
         merged = []
         i = 0
         j = 0
-        for k in range(len(lhs) + len(rhs)):
+        for _ in range(len(lhs) + len(rhs)):
             if i == len(lhs) or j < len(rhs) and lhs[i] > rhs[j]:
                 merged.append(rhs[j])
                 j += 1
@@ -27,54 +30,61 @@ def mergesort(num_array):
                 i += 1
         return merged
 
-    if len(num_array) == 1:
-        return num_array
-    if len(num_array) == 2:
-        return num_array if num_array[0] < num_array[1] else [num_array[1], num_array[0]]
-    half_size = int(len(num_array) / 2)
+    if len(elements) <= 1:
+        return elements
+
+    half_size = int(len(elements) / 2)
+
     return merge(
-        mergesort(num_array[0:half_size]),
-        mergesort(num_array[half_size:])
+        mergesort(elements[:half_size]),
+        mergesort(elements[half_size:])
     )
 
 
-def quicksort(num_array):
-    """sorts num_array in-place
-    returns None"""
+def quicksort(elements):
+    """Sorts elements in-place. Returns None."""
+
     def quicksort_subarray(left, right):
-        """Sorts in-place a subarray of num_array from the left index (inclusive) to the right index (exclusive)."""
+        """Sorts in-place a subarray of elements from the left index (inclusive) to the right index (exclusive)."""
         if left < right:
             sec_part_idx = partition(left, right)
             quicksort_subarray(left, sec_part_idx - 1)
             quicksort_subarray(sec_part_idx, right)
 
     def partition(left, right):
-        """Partition in-place a subarray of num_array from the left index (inclusive) to the right index (exclusive).
+        """Partition in-place a subarray of elements from the left index (inclusive) to the right index (exclusive).
         Returns an index of the beginning of the second partition.
-        The implementation assumes that the first element of an array is a pivot."""
-        pivot = num_array[left]
+        The implementation assumes that the first element of an array is a pivot element (aka a partitioning element)."""
+        pivot = elements[left]
         i = left + 1
         for j in range(left + 1, right):
-            if num_array[j] < pivot:
-                num_array[i], num_array[j] = num_array[j], num_array[i]
+            if elements[j] < pivot:
+                elements[i], elements[j] = elements[j], elements[i]
                 i += 1
-        num_array[left], num_array[i - 1] = num_array[i - 1], num_array[left]  # placing a pivot in a proper place
+        elements[left], elements[i - 1] = elements[i - 1], elements[left]  # placing a pivot in a proper place
         return i
 
-    quicksort_subarray(0, len(num_array))
+    quicksort_subarray(0, len(elements))
+
+
+def assert_sort(unsortet, sorted):
+    assert insertionsort(unsortet) == sorted
+    assert mergesort(unsortet) == sorted
+
+    to_sort = copy(unsortet)
+    quicksort(to_sort)
+    assert to_sort == sorted
 
 
 if __name__ == '__main__':
-    from copy import copy
-
-    numbers = [3, 5, 4, 1, 8, 6, 1]
-    numbers_sorted = [1, 1, 3, 4, 5, 6, 8]
-
-    assert insertionsort(numbers) == numbers_sorted
-    assert mergesort(numbers) == numbers_sorted
-
-    numbers_to_sort = copy(numbers)
-    quicksort(numbers_to_sort)
-    assert numbers_to_sort == numbers_sorted
+    assert_sort([], [])
+    assert_sort([1, -1], [-1, 1])
+    assert_sort([3, 2, 1], [1, 2, 3])
+    assert_sort([1, 2, 3], [1, 2, 3])
+    assert_sort([1, 3, -2], [-2, 1, 3])
+    assert_sort([0, 0, 0, 0], [0, 0, 0, 0])
+    assert_sort([-2, 2, -1, 1, 0], [-2, -1, 0, 1, 2])
+    assert_sort([3, 5, 4, 1, 8, 6, 1], [1, 1, 3, 4, 5, 6, 8])
+    assert_sort(['A', 'C', 'B'], ['A', 'B', 'C'])
 
     print('All tests passed')
