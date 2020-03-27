@@ -4,14 +4,11 @@ from copy import copy
 def insertionsort(elements):
     def insert(element, sorted_elements):
         if len(sorted_elements) == 0:
-            to_return = [element]
+            return [element]
         elif element < sorted_elements[0]:
-            to_return = [element]
-            to_return.extend(sorted_elements)
+            return [element] + sorted_elements
         else:
-            to_return = [sorted_elements[0]]
-            to_return.extend(insert(element, sorted_elements[1:]))
-        return to_return
+            return [sorted_elements[0]] + insert(element, sorted_elements[1:])
 
     return elements if len(elements) == 0 else insert(elements[0], insertionsort(elements[1:]))
 
@@ -47,22 +44,31 @@ def quicksort(elements):
     def quicksort_subarray(left, right):
         """Sorts in-place a subarray of elements from the left index (inclusive) to the right index (exclusive)."""
         if left < right:
-            sec_part_idx = partition(left, right)
-            quicksort_subarray(left, sec_part_idx - 1)
-            quicksort_subarray(sec_part_idx, right)
+            second_partition_start = partition(left, right)
+            quicksort_subarray(left, second_partition_start - 1)
+            quicksort_subarray(second_partition_start, right)
+
+    def swap(a, b):
+        elements[a], elements[b] = elements[b], elements[a]
 
     def partition(left, right):
         """Partition in-place a subarray of elements from the left index (inclusive) to the right index (exclusive).
         Returns an index of the beginning of the second partition.
         The implementation assumes that the first element of an array is a pivot element (aka a partitioning element)."""
         pivot = elements[left]
-        i = left + 1
-        for j in range(left + 1, right):
-            if elements[j] < pivot:
-                elements[i], elements[j] = elements[j], elements[i]
-                i += 1
-        elements[left], elements[i - 1] = elements[i - 1], elements[left]  # placing a pivot in a proper place
-        return i
+        # initially assume that the first partition is empty so the second starts just after the pivot
+        second_partition_start = left + 1
+        # now go through all the elements
+        for i in range(left + 1, right):
+            # and if a given element is smaller than the pivot
+            if elements[i] < pivot:
+                # then increase the first partition size by moving the start of the second to the right
+                second_partition_start += 1
+                # and move the element to the end of the first partition
+                swap(i, second_partition_start - 1)
+        # finally, place the pivot between the first and the second partition
+        swap(left, second_partition_start - 1)
+        return second_partition_start
 
     quicksort_subarray(0, len(elements))
 

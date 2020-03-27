@@ -1,7 +1,7 @@
 class Graph:
     """Adjacency-list representation of a graph"""
     def __init__(self, vertex_number):
-        self.__adjacencies = [{} for i in range(vertex_number)]
+        self.__adjacencies = [{} for _ in range(vertex_number)]
 
     def add_edge(self, a, b, length=1, undirected=True):
         self.__adjacencies[a][b] = length
