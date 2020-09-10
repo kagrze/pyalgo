@@ -3,14 +3,12 @@ from copy import copy
 
 def insertionsort(elements):
     def insert(element, sorted_elements):
-        if len(sorted_elements) == 0:
-            return [element]
-        elif element < sorted_elements[0]:
+        if len(sorted_elements) == 0 or element < sorted_elements[0]:
             return [element] + sorted_elements
         else:
-            return [sorted_elements[0]] + insert(element, sorted_elements[1:])
+            return sorted_elements[0:1] + insert(element, sorted_elements[1:])
 
-    return elements if len(elements) == 0 else insert(elements[0], insertionsort(elements[1:]))
+    return elements if len(elements) < 2 else insert(elements[0], insertionsort(elements[1:]))
 
 
 def mergesort(elements):
